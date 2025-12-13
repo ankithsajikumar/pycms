@@ -29,8 +29,8 @@ urlpatterns = [
     path("admin/login/", sso_views.login, name="login"),
     path("auth/callback/", sso_views.callback, name="callback"),
     path('admin/', admin.site.urls),
-    path('<str:app_name>/', serve_static_app, name='serve_static_app'),
-    path('<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app_subpath'),
+    path('apps/<str:app_name>/', serve_static_app, name='serve_static_app'),
+    path('apps/<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app_subpath'),
 ]
 
 admin.site.site_header = 'CMS Administration'
