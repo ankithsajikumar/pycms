@@ -1,4 +1,4 @@
-# MessageBridge (PyMessageService)
+# PyCms
 
 A Django-based messaging and smart device service providing APIs for polling messages and smart home fulfillment, with authentication via OAuth2.
 
@@ -20,8 +20,8 @@ A Django-based messaging and smart device service providing APIs for polling mes
 ### 1. Clone the repository
 
 ```sh
-git clone https://github.com/ankithsajikumar/pymessageservice.git
-cd pymessageservice
+git clone https://github.com/ankithsajikumar/pycms.git
+cd pycms
 ```
 
 ### 2. Set up a virtual environment
@@ -71,20 +71,6 @@ pip freeze > requirements.txt
 
 ## API Endpoints
 
-- **Poll Messages:**  
-  - `POST /api/poll-messages/` — Poll unread messages and mark messages as read  
-    ```sh
-    curl -X POST https://domain/api/poll-messages/ \
-      -H "Authorization: Bearer <access_token>" \
-      -H "Content-Type: application/json" \
-      -d '{"messagesRead": ["uuid1", "uuid2"]}'
-    ```
-    - Returns all unread messages and marks the provided message IDs as read.
-
-- **Smart Home Fulfillment:**  
-  - `POST /smarthome/fulfillment/` — Handles smart home intents (SYNC, QUERY, EXECUTE, DISCONNECT)  
-    - Requires appropriate permissions and payload structure.
-
 ---
 
 ## Authentication
@@ -124,28 +110,19 @@ pip freeze > requirements.txt
 ## Project Structure
 
 ```
-pymessageservice/
+pycms/
 ├── manage.py
 ├── requirements.txt
 ├── README.md
-├── messagesApp/
-│   ├── models.py
-│   ├── views.py
-│   ├── admin.py
-│   └── ...
-├── smartDevices/
+├── appmanager/
 │   ├── models.py
 │   ├── admin.py
-│   └── ...
-├── smartIntents/
-│   ├── views.py
-│   ├── services.py
 │   └── ...
 ├── users/
 │   ├── models.py
 │   ├── admin.py
 │   └── ...
-└── pymessageservice/
+└── pycms/
     ├── settings.py
     ├── urls.py
     └── ...
@@ -155,11 +132,6 @@ pymessageservice/
 
 ## TODO
 
-- [ ] Implement BFF (Backend For Frontend) pattern to securely expose authentication/session info for frontend apps.
-    - The backend should handle all OAuth2 flows and session management.
-    - Frontend apps should interact only with the Django backend (BFF), not directly with the SSO provider.
-    - Provide endpoints for the frontend to fetch user info and perform authenticated actions without exposing access tokens to the browser.
-- [ ] Add API endpoints for message CRUD operations.
 - [ ] Improve error handling and logging.
 - [ ] Add unit and integration tests.
 - [ ] Enhance documentation for API usage and authentication flows.

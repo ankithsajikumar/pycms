@@ -35,7 +35,7 @@ jobs:
           RESPONSE=$(curl -s -w "%{http_code}" -o source_pull_response.json -X POST "https://www.pythonanywhere.com/api/v0${{ steps.bashconsole.outputs.console_url }}send_input/" \
             -H "Authorization: Token ${{ secrets.CONSOLE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"input": "cd ~/pymessageservice\ngit pull origin\n"}')
+            -d '{"input": "cd ~/pycms\ngit pull origin\n"}')
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Pull step failed (status $RESPONSE)"
             cat source_pull_response.json
@@ -48,7 +48,7 @@ jobs:
           RESPONSE=$(curl -s -w "%{http_code}" -o pip_install_response.json -X POST "https://www.pythonanywhere.com/api/v0${{ steps.bashconsole.outputs.console_url }}send_input/" \
             -H "Authorization: Token ${{ secrets.CONSOLE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"input": "cd ~/pymessageservice\npip install -r requirements.txt\n"}')
+            -d '{"input": "cd ~/pycms\npip install -r requirements.txt\n"}')
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Dependency install step failed (status $RESPONSE)"
             cat pip_install_response.json
@@ -61,7 +61,7 @@ jobs:
           RESPONSE=$(curl -s -w "%{http_code}" -o collectstatic_response.json -X POST "https://www.pythonanywhere.com/api/v0${{ steps.bashconsole.outputs.console_url }}send_input/" \
             -H "Authorization: Token ${{ secrets.CONSOLE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"input": "cd ~/pymessageservice\npython manage.py collectstatic --noinput\n"}')
+            -d '{"input": "cd ~/pycms\npython manage.py collectstatic --noinput\n"}')
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Collectstatic step failed (status $RESPONSE)"
             cat collectstatic_response.json
@@ -74,7 +74,7 @@ jobs:
           RESPONSE=$(curl -s -w "%{http_code}" -o migrate_response.json -X POST "https://www.pythonanywhere.com/api/v0${{ steps.bashconsole.outputs.console_url }}send_input/" \
             -H "Authorization: Token ${{ secrets.CONSOLE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"input": "cd ~/pymessageservice\npython manage.py migrate --noinput\n"}')
+            -d '{"input": "cd ~/pycms\npython manage.py migrate --noinput\n"}')
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Migrate step failed (status $RESPONSE)"
             cat migrate_response.json

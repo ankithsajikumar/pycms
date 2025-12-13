@@ -3,7 +3,7 @@ import django
 import logging
 from django.core.management import call_command
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pymessageservice.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pycms.settings')
 django.setup()
 
 logger = logging.getLogger('maintenance')

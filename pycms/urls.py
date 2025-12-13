@@ -1,4 +1,4 @@
-"""pymessageservice URL Configuration
+"""pycms URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -17,9 +17,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path
 from django_sso_client_oauth import views as sso_views
-from messagesApp.views import poll_messages
-from smartIntents.views import smart_home_fulfillment
 from django.http import HttpResponseRedirect
+from django.conf.urls.static import static
+from appmanager.views import serve_static_app
 
 def home_redirect(request):
     return HttpResponseRedirect(settings.HOME_URL)
@@ -29,10 +29,13 @@ urlpatterns = [
     path("admin/login/", sso_views.login, name="login"),
     path("auth/callback/", sso_views.callback, name="callback"),
     path('admin/', admin.site.urls),
-    path("api/poll-messages/", poll_messages, name="poll_messages"),
-    path('smarthome/fulfillment/', smart_home_fulfillment, name='smart_home_fulfillment')
+    path('<str:app_name>/', serve_static_app, name='serve_static_app'),
+    path('<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app_subpath'),
 ]
 
-admin.site.site_header = 'MessageBridge Administration'
-admin.site.index_title = 'Entity Management'
-admin.site.site_title = 'MessageBridge Admin'
+admin.site.site_header = 'CMS Administration'
+admin.site.index_title = 'Content Management'
+admin.site.site_title = 'Hacksaw CMS'
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
