@@ -4,9 +4,9 @@ from .models import App
 @admin.register(App)
 class AppAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'created_at')
-    fields = ('name', 'repo_url', 'subdomain', 'status', 'build_file')
+    exclude = ('user',)
 
     def save_model(self, request, obj, form, change):
-        if not obj.pk:
+        if not change:
             obj.user = request.user
         super().save_model(request, obj, form, change)
