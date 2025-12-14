@@ -2,6 +2,7 @@ import os
 import zipfile
 import time
 import shutil
+import glob
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
 from django.conf import settings
@@ -24,21 +25,15 @@ def remove_old_zip_and_templates_on_update(sender, instance, **kwargs):
             os.remove(old_file.path)
         except Exception:
             pass
-    # Remove old versioned template if buildnumber will change
-    if old_instance.buildnumber and old_instance.buildnumber != instance.buildnumber:
-        old_versioned = os.path.join(templates_dir, f'index_{old_instance.buildnumber}.html')
-        if os.path.exists(old_versioned):
-            try:
-                os.remove(old_versioned)
-            except Exception:
-                pass
-    # Remove old index.html (always, since it will be replaced)
-    old_index = os.path.join(templates_dir, 'index.html')
-    if os.path.exists(old_index):
-        try:
-            os.remove(old_index)
-        except Exception:
-            pass
+    # Remove all index_* templates (versioned and plain) before new upload
+    if os.path.exists(templates_dir):
+        patterns = ["index.html", "index_*.html"]
+        for pattern in patterns:
+            for f in glob.glob(os.path.join(templates_dir, pattern)):
+                try:
+                    os.remove(f)
+                except Exception:
+                    pass
 
 @receiver(post_save, sender=App)
 def handle_build_artifact(sender, instance, created, **kwargs):
