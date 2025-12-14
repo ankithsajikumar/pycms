@@ -20,6 +20,7 @@ class App(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     last_deployed = models.DateTimeField(auto_now=True)
     build_file = models.FileField(upload_to='app_builds/', blank=True, null=True)
+    buildnumber = models.BigIntegerField(blank=True, null=True)
     
     class Meta:
         ordering = ['-created_at']
