@@ -29,8 +29,6 @@ urlpatterns = [
     path("admin/login/", sso_views.login, name="login"),
     path("auth/callback/", sso_views.callback, name="callback"),
     path('admin/', admin.site.urls),
-    # path('apps/<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app'),
-    # path('apps/<str:app_name>/', serve_static_app, name='serve_static_app'),
     re_path(
         r'^apps/(?P<app_name>[^/]+)/(?P<subpath>.+?)/?$',
         serve_static_app,

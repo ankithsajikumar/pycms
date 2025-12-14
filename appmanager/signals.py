@@ -18,7 +18,7 @@ def remove_old_zip_and_templates_on_update(sender, instance, **kwargs):
         return
     old_file = old_instance.build_file
     new_file = instance.build_file
-    templates_dir = os.path.join(settings.BASE_DIR, 'templates', 'apps', instance.name)
+    templates_dir = os.path.join(settings.TEMPLATES_DIR, instance.name)
     # Remove old zip if changed
     if old_file and old_file != new_file and os.path.exists(old_file.path):
         try:
@@ -43,35 +43,25 @@ def handle_build_artifact(sender, instance, created, **kwargs):
         App.objects.filter(pk=instance.pk).update(buildnumber=buildnumber)
         instance.buildnumber = buildnumber  # update in-memory instance
 
-        templates_dir = os.path.join(settings.BASE_DIR, 'templates', 'apps', instance.name)
-        static_dir = os.path.join(settings.STATIC_PATH_INSTALLED_APPS, instance.name)
+        templates_dir = os.path.join(settings.TEMPLATES_DIR, instance.name)
         os.makedirs(templates_dir, exist_ok=True)
-        os.makedirs(static_dir, exist_ok=True)
         build_path = instance.build_file.path
         with zipfile.ZipFile(build_path, 'r') as zip_ref:
-            zip_ref.extractall(static_dir)
-        index_html_path = os.path.join(static_dir, 'index.html')
+            zip_ref.extractall(templates_dir)  # Extract everything to templates_dir
+
+        index_html_path = os.path.join(templates_dir, 'index.html')
         versioned_template = os.path.join(templates_dir, f'index_{buildnumber}.html')
-        index_template = os.path.join(templates_dir, 'index.html')
         if os.path.exists(index_html_path):
-            # Copy index.html to both versioned and plain index.html in templates
+            # Copy index.html to versioned index.html in templates
             shutil.copy2(index_html_path, versioned_template)
-            shutil.copy2(index_html_path, index_template)
 
 @receiver(post_delete, sender=App)
 def remove_build_artifact(sender, instance, **kwargs):
-    templates_dir = os.path.join(settings.BASE_DIR, 'templates', 'apps', instance.name)
-    static_dir = os.path.join(settings.STATIC_PATH_INSTALLED_APPS, instance.name)
-    # Remove the entire templates directory for the app
+    templates_dir = os.path.join(settings.TEMPLATES_DIR, instance.name)
+    # Remove the entire templates directory for the app (including all static and template files)
     if os.path.exists(templates_dir):
         try:
             shutil.rmtree(templates_dir)
-        except Exception:
-            pass
-    # Remove the entire static directory for the app
-    if os.path.exists(static_dir):
-        try:
-            shutil.rmtree(static_dir)
         except Exception:
             pass
     # Remove the uploaded zip file if it exists

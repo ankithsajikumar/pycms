@@ -78,10 +78,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(STATIC_ROOT, 'static')]
-STATIC_PATH_INSTALLED_APPS = os.path.join(BASE_DIR, 'clients','static')
 
 # Templates
-TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'webapps')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

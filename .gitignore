@@ -172,5 +172,4 @@ pycms/__pycache__/urls.cpython-37.pyc
 /logs
 /media
 /staticfiles
-/templates
-/clients
+/webapps

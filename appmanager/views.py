@@ -16,7 +16,7 @@ def serve_static_app(request, app_name, subpath=None):
     """
     try:
         app = App.objects.get(name=app_name)
-        templates_dir = os.path.join(settings.BASE_DIR, 'templates', 'apps', app_name)
+        templates_dir = os.path.join(settings.TEMPLATES_DIR, app_name)
         # If subpath is an asset, serve it directly from the templates directory
         if subpath:
             ext = os.path.splitext(subpath)[1].lower()
@@ -30,8 +30,8 @@ def serve_static_app(request, app_name, subpath=None):
         # Otherwise, serve the React app's index.html (versioned or fallback)
         template_names = []
         if app.buildnumber:
-            template_names.append(f'apps/{app_name}/index_{app.buildnumber}.html')
-        template_names.append(f'apps/{app_name}/index.html')
+            template_names.append(f'{app_name}/index_{app.buildnumber}.html')
+        template_names.append(f'{app_name}/index.html')
         for template_name in template_names:
             try:
                 return render(request, template_name)
