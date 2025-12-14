@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path
+from django.urls import path, re_path
 from django_sso_client_oauth import views as sso_views
 from django.http import HttpResponseRedirect
 from django.conf.urls.static import static
@@ -29,8 +29,19 @@ urlpatterns = [
     path("admin/login/", sso_views.login, name="login"),
     path("auth/callback/", sso_views.callback, name="callback"),
     path('admin/', admin.site.urls),
-    path('apps/<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app'),
-    path('apps/<str:app_name>/', serve_static_app, name='serve_static_app'),
+    # path('apps/<str:app_name>/<path:subpath>/', serve_static_app, name='serve_static_app'),
+    # path('apps/<str:app_name>/', serve_static_app, name='serve_static_app'),
+    re_path(
+        r'^apps/(?P<app_name>[^/]+)/(?P<subpath>.+?)/?$',
+        serve_static_app,
+        name='serve_static_app'
+    ),
+
+    re_path(
+        r'^apps/(?P<app_name>[^/]+)/?$',
+        serve_static_app,
+        name='serve_static_app_root'
+    ),
 ]
 
 admin.site.site_header = 'CMS Administration'
