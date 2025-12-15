@@ -70,7 +70,22 @@ pip freeze > requirements.txt
 ---
 
 ## API Endpoints
-
+- **Deployment:**  
+  - Deploy built zip file 
+  ```sh
+  curl -X POST \
+  -F "build_file=@/path/to/app.zip" \
+  https://example.com/api/apps/{id}/deploy/
+  ```
+  - Deploy built files individually
+  ```sh
+  curl -X POST \
+  -F "files=@index.html" \
+  -F "files=@manifest.json" \
+  -F "files=@static/css/main.css" \
+  -F "files=@static/js/main.js" \
+  http://example.com/api/apps/{id}/deploy/
+  ```
 ---
 
 ## Authentication

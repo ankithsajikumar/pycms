@@ -15,14 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from django_sso_client_oauth import views as sso_views
 from django.http import HttpResponseRedirect
 from django.conf.urls.static import static
 from appmanager.views import serve_static_app
+from rest_framework.routers import DefaultRouter
+from appmanager.views import AppViewSet
 
 def home_redirect(request):
     return HttpResponseRedirect(settings.HOME_URL)
+
+router = DefaultRouter()
+router.register(r'apps', AppViewSet, basename='app')
 
 urlpatterns = [
     path('', home_redirect),
@@ -40,6 +45,7 @@ urlpatterns = [
         serve_static_app,
         name='serve_static_app_root'
     ),
+    path('api/', include(router.urls)),
 ]
 
 admin.site.site_header = 'CMS Administration'
